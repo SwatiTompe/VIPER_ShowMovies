@@ -1,0 +1,12 @@
+{
+    "movies":[
+        {
+            "actorName" : "Akshay Kumar",
+            "movies" : ["Phir hera pheri","Dhadkan","Welcome"]
+        },
+        {
+            "actorName" : "Shahrukh Khan",
+            "movies" : ["Kuch Kuch Hota Hai", "Kabhi Khushi Kabhi Gham"]
+        }
+    ]
+}

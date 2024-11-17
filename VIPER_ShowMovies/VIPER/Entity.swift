@@ -6,12 +6,13 @@
 //
 
 
-//class Movie {
-//    let actor: String
-//    let movies: [String]
-//    
-//    init(actor: String, movies: [String]) {
-//        self.actor = actor
-//        self.movies = movies
-//    }
-//}
+import Foundation
+
+struct MovieResponse : Decodable {
+    let movies : [ActorMovies]
+}
+
+struct ActorMovies : Decodable {
+    let actorName : String
+    let movies : [String]
+}
