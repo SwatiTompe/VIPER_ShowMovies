@@ -5,20 +5,44 @@
 //  Created by Admin on 16/11/24.
 //
 
+import Foundation
+
 class MovieSearchInteractor : MovieSearchInteractorProtocol {
     
     weak var presenter : MoviesSearchInteractorOutputProtocol?
     
+    private var actorMovies: [ActorMovies] = []
+    
+    init() {
+        loadMoviesFromJSON()
+    }
+    
+    private func loadMoviesFromJSON() {
+        guard let url = Bundle.main.url(forResource: "movies", withExtension: "json") else {
+            print("JSON file not found")
+            return
+        }
+        
+        do {
+            let data = try Data(contentsOf: url)
+            let decodeResponse = try JSONDecoder().decode(MovieResponse.self, from: data)
+            actorMovies = decodeResponse.movies
+        } catch  {
+            print("error decoding json \(error)")
+        }
+    }
+    
+    
     func fetchMovies(keyword: String) {
-        //simulate data from Api or from database
-        if keyword.lowercased() == "akshay" {
-            presenter?.moviesFetched(movies: ["Phir hera Pheri","Dhadkan","Welcom"])
-        } else if keyword.lowercased() == "shahrukh" {
-            presenter?.moviesFetched(movies: ["kuch kuch hota he","kabhi Khshi kabhi gam"])
-        } else if keyword.lowercased() == "empty" {
-            presenter?.fetchFailed(error: "No movies found with keyword \(keyword)")
-        } else {
-            presenter?.fetchFailed(error: "something went wrong")
+        
+        // Search for actor's movies based on the keyword
+        let filteredMovies = actorMovies.filter { $0.actorName.lowercased().contains(keyword.lowercased()) }
+        
+        if filteredMovies.isEmpty {
+            presenter?.fetchFailed(error: "no Movies found")
+        }
+        else {
+            presenter?.moviesFetched(movies: filteredMovies)
         }
         
     }

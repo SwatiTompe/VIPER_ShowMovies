@@ -11,29 +11,13 @@ class MovieSearchViewController: UIViewController, MovieSearchViewProtocol {
 
     var presenter: MovieSearchPresenterProtocol?
     
-     var searchBar = UISearchBar()
-     var resultLabel = UILabel()
-    
-    deinit {
-        print("Deinitialized MovieSearchViewController instance:", self)
-    }
-
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        print("MovieSearchViewController created via storyboard/XIB:", self)
-    }
-
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        print("MovieSearchViewController created programmatically:", self)
-    }
+    var searchBar = UISearchBar()
+    private let tableView = UITableView()
+    private var actorMovies : [ActorMovies] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
-        print("Loaded MovieSearchViewController instance:", self)
-        print("Presenter:", presenter ?? "nil")
         
         setUpUI()
     }
@@ -41,23 +25,22 @@ class MovieSearchViewController: UIViewController, MovieSearchViewProtocol {
     func setUpUI() {
         searchBar.delegate = self
         searchBar.placeholder = "search for movies"
-        searchBar.frame = CGRect(x: 20, y: 100, width: self.view.frame.width - 40, height: 40)
-        self.view.addSubview(searchBar)
+        navigationItem.titleView = searchBar
+
+        tableView.frame = view.bounds
+        tableView.dataSource = self
+        view.addSubview(tableView)
+    }
+    
+    func showMovies(_ movies: [ActorMovies]) {
+        self.actorMovies = movies
+        tableView.reloadData()
+    }
         
-        resultLabel.numberOfLines = 0
-        resultLabel.textAlignment = .center
-        resultLabel.textColor = .black
-        resultLabel.frame = CGRect(x: 20, y: 200, width: self.view.frame.width - 40, height: 100)
-        self.view.addSubview(resultLabel)
-    }
-    
-    func showMovies(_ movies: [String]) {
-        resultLabel.text = "movies fetched : \n" + movies.joined(separator: "\n")
-    }
-    
     func showError(_ error: String) {
-        resultLabel.text = "Movies fetch failed with error = \(error)"
-    }
+        self.actorMovies = []
+        tableView.reloadData()
+        print("No movies found.")    }
 
 }
 
@@ -68,4 +51,20 @@ extension MovieSearchViewController : UISearchBarDelegate {
             presenter?.searchMovies(with: keyword)
         }
     }
+}
+
+extension MovieSearchViewController : UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return actorMovies.first?.movies.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = UITableViewCell(style: .default, reuseIdentifier: "MovieCell")
+        
+        if let movie = actorMovies.first?.movies[indexPath.row]{
+            cell.textLabel?.text = movie
+        }
+        return cell
+    }
+    
 }

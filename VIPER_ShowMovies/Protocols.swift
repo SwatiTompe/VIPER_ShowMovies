@@ -12,7 +12,7 @@ protocol MovieSearchPresenterProtocol : AnyObject {
 }
 
 protocol MovieSearchViewProtocol :AnyObject {
-    func showMovies(_ movies : [String])
+    func showMovies(_ movies : [ActorMovies])
     func showError(_ error : String)
 }
 
@@ -22,7 +22,7 @@ protocol MovieSearchInteractorProtocol : AnyObject {
 }
 
 protocol MoviesSearchInteractorOutputProtocol : AnyObject {
-    func moviesFetched(movies : [String])
+    func moviesFetched(movies : [ActorMovies])
     func fetchFailed(error : String)
 }
 

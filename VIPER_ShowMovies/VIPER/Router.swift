@@ -12,21 +12,14 @@ class MovieSearchRouter : MovieSearchRouterProtocol {
         let view = MovieSearchViewController()
         let presenter = MovieSearchPresenter()
         let interactor = MovieSearchInteractor()
-//        let router = MovieSearchRouter()
+//      let router = MovieSearchRouter()
             
         view.presenter = presenter
         presenter.view = view
         presenter.interactor = interactor
-//        presenter.router = router
+//      presenter.router = router
         interactor.presenter = presenter
         
-        // Debug prints to verify
-        print("Presenter:", presenter)
-        print("Presenter's View:", presenter.view ?? "nil")
-        print("Presenter's Interactor:", presenter.interactor ?? "nil")
-//        print("Presenter's Router:", presenter.router ?? "nil")
-        print("Interactor's Presenter:", interactor.presenter ?? "nil")
-
         return view
     }
     

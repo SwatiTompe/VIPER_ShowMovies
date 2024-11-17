@@ -28,7 +28,7 @@ class MovieSearchPresenter : MovieSearchPresenterProtocol {
 
 extension MovieSearchPresenter : MoviesSearchInteractorOutputProtocol {
     
-    func moviesFetched(movies: [String]) {
+    func moviesFetched(movies: [ActorMovies]) {
         view?.showMovies(movies)
     }
     
